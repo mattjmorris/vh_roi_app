@@ -165,13 +165,13 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
         txt = """
         Adverse patient events can incur different and multiple costs, depending on their severity: 
         * The time it takes for internal review
-        * The time and cost of external review, and if applicable, plans of correction
+        * The time and cost of external review and plans of correction
         * Impacts on survey and the potential for citation
         * Litigation costs, and impacts on liability insurance rates
         * Impact on hospital reputation and ability to recruit patients / fill beds
 
         When facilities use our software system, compliance rates quickly increase to approximately 99%.
-        Automated verification ensures that all staff, regardless of time of day, are visiting each patient in person.
+        The addition of automated verification ensures that all staff, regardless of time of day, are visiting each patient in person.
         Please estimate the average annual cost of adverse events in your facility, taking into account that low-acuity events happen relatively frequently and that high-acuity events can have economic impacts in millions of dollars.
         """
         st.markdown(txt)
