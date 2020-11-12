@@ -12,7 +12,7 @@ days_per_year = 365
 
 st.title("VisibleHand: ROI Calculator")
 
-st.header("Please adjust inputs to see the effect on your ROI.")
+st.header("Please adjust inputs by clicking on rows with a '+'.")
 
 st.text("(All calculations are for a single facility.)")
 
@@ -163,27 +163,32 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
     with slider_col:  
 
         txt = """
-        Adverse patient events can incur different multiple costs, depending on their severity: 
+        Adverse patient events can incur different and multiple costs, depending on their severity: 
         * The time it takes for internal review
-        * The time and cost of external review and plans of correction
+        * The time and cost of external review, and if applicable, plans of correction
         * Impacts on survey and the potential for citation
         * Litigation costs, and impacts on liability insurance rates
         * Impact on hospital reputation and ability to recruit patients / fill beds
 
         When facilities use our software system, compliance rates quickly increase to approximately 99%.
         Automated verification ensures that all staff, regardless of time of day, are visiting each patient in person.
-        Please estimate the annual (amortized) cost of adverse events in your facility and the reduction that an increase in compliance and staff safety performance would have.
+        Please estimate the average annual cost of adverse events in your facility, taking into account that low-acuity events happen relatively frequently and that high-acuity events can have economic impacts in millions of dollars.
         """
         st.markdown(txt)
         st.write(" ")
         
-        include_verification = st.checkbox("Include Automated Verification in Analysis", True)
+        include_verification = st.checkbox("Include Automated Verification in Analysis", False)
 
-        adverse_cost = st.slider("Total annual $ cost of adverse patient events", 0, 1000000, 200000, 10000)
+        adverse_cost = st.slider("Total average annual $ cost of adverse patient events", 0, 1000000, 200000, 10000)
         if include_verification:
             risk_reduction = st.slider("Estimated % risk reduction from 99% compliance and automated proximity verification for all safety checks.", 0, 100, 90, 5)
         else:
             risk_reduction = st.slider("Estimated % risk reduction from 99% safety rounding compliance", 0, 100, 50, 5)
+
+        st.write(" ")
+        st.markdown("#### Cacluations")
+        st.write(" ")
+        st.text(f"Reduction: {adverse_cost} * {risk_reduction / 100} = {int(adverse_cost * risk_reduction / 100):,}")    
 
 expected_cost_reduction_adverse = adverse_cost * risk_reduction / 100
 st.markdown(f"Expected reduction in cost due to adverse events = **${int(expected_cost_reduction_adverse):,}**")
@@ -196,7 +201,11 @@ if include_verification:
     cost = 65 * num_facility_patients * 12
 else:
     cost = 25 * num_facility_patients * 12
-st.markdown(f"Annual recurring cost of VisibleHand software and hardware = **${cost:,}**")
+if include_verification:
+    txt = f"Annual recurring cost of VisibleHand digital rounding and verification system = **${cost:,}**"
+else:
+    txt = f"Annual recurring cost of VisibleHand digital rounding system = **${cost:,}**"
+st.markdown(txt)
 
 total_savings = expected_savings_staff + expected_savings_nurses + expected_savings_paper + expected_cost_reduction_adverse
 st.markdown(f"Annual expected savings = **${int(total_savings):,}**")
