@@ -37,7 +37,7 @@ st.sidebar.write(" ")
 
 num_facility_patients = st.sidebar.number_input('Number of patients in your facility', value=100, step=10, format='%d')
 st.write(" ")
-include_verification = st.sidebar.checkbox("Include patient proximity.", False)
+include_verification = st.sidebar.checkbox("Include Proximity Verification.", False)
 
 
 with st.beta_expander("What is your number of units and how long do rounds take?", False):
