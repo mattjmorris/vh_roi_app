@@ -22,7 +22,7 @@ st.sidebar.info(d)
 st.write(" ")
 st.write(" ")
 st.write(" ")
-st.write("Do you want to include our Automated Verification component in these analyses? Automated Verification adds to the cost of the system but has a greater impact on risk reduction and savings.")
+st.write("Do you want to include our Patient Proximity component in these analyses? Patient Proximity adds to the cost of the system but has a greater impact on risk reduction and savings.")
 include_verification = st.checkbox("Include automated verification component in analyses", False)
 
 st.write(" ")
