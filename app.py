@@ -55,7 +55,15 @@ with st.beta_expander("What is the impact of increasing Health Tech efficiency?"
 
     _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
 
-    with slider_col:   
+    with slider_col:  
+
+        st.success("We find that staff typically complete their rounds 40% faster with our digital app than with paper, providing staff with time to complete other tasks.")
+        
+        time_savings_perc = st.slider(
+            'Expected % time savings.', 
+            10, 70, 40, 5
+        )     
+ 
 
         staff_q_time_str = st.selectbox(
             'How often do staff rounds occur (hosptials usually do Q-15s)?', ('15 minutes', '30 minutes', '60 minutes', '90 minutes', '120 minutes')
@@ -69,15 +77,6 @@ with st.beta_expander("What is the impact of increasing Health Tech efficiency?"
             0, 20, 10
         ) 
 
-        st.write(" ")
-
-        st.success("We find that staff typically complete their rounds 40% faster with our digital app than with paper, providing staff with time to complete other tasks.")
-        
-        time_savings_perc = st.slider(
-            'Expected % time savings.', 
-            10, 70, 40, 5
-        )     
-
         number_of_staff_rounds_per_unit_per_day = (minutes_per_hour * hours_per_day) / staff_q_time
         mins_saved_per_round = mins_to_complete_round * time_savings_perc / 100
         staff_mins_saved_per_year_per_unit = mins_saved_per_round * number_of_staff_rounds_per_unit_per_day * days_per_year 
@@ -85,14 +84,16 @@ with st.beta_expander("What is the impact of increasing Health Tech efficiency?"
         staff_hours_saved_per_year_per_facility = staff_hours_saved_per_year_per_unit * number_of_units
         expected_savings_staff = round(staff_hours_saved_per_year_per_facility * staff_hourly_value)
 
-        st.write(" ")
-        st.markdown("#### Cacluations")
-        st.write(" ")
-        st.text(f"Minutes saved per round: {mins_to_complete_round} * {time_savings_perc / 100} = {round(mins_saved_per_round,1)}")
-        st.text(f"Number of rounds per unit per day: ({minutes_per_hour} * {hours_per_day}) / {staff_q_time} = {int(number_of_staff_rounds_per_unit_per_day)}")
-        st.text(f"Hours saved per unit per year: ({round(mins_saved_per_round,1)} / 60) * {int(number_of_staff_rounds_per_unit_per_day)} * 365 = {round(staff_hours_saved_per_year_per_unit,1)}")
-        st.text(f"Hours saved per facility per year: {round(staff_hours_saved_per_year_per_unit,1)} * {number_of_units} = {round(staff_hours_saved_per_year_per_facility,1)}")
-        st.text(f"Dollars saved per year = {int(round(staff_hours_saved_per_year_per_facility, 0)):,} * ${staff_hourly_value} = ${expected_savings_staff:,}")
+        st.markdown(" ")
+        t = f"""
+        CALCULATIONS
+        Minutes saved per round: {mins_to_complete_round} * {time_savings_perc / 100} = {round(mins_saved_per_round,1)}
+        Number of rounds per unit per day: ({minutes_per_hour} * {hours_per_day}) / {staff_q_time} = {int(number_of_staff_rounds_per_unit_per_day)}
+        Hours saved per unit per year: ({round(mins_saved_per_round,1)} / 60) * {int(number_of_staff_rounds_per_unit_per_day)} * 365 = {round(staff_hours_saved_per_year_per_unit,1)}
+        Hours saved per facility per year: {round(staff_hours_saved_per_year_per_unit,1)} * {number_of_units} = {round(staff_hours_saved_per_year_per_facility,1)}
+        Dollars saved per year = {int(round(staff_hours_saved_per_year_per_facility, 0)):,} * ${staff_hourly_value} = ${expected_savings_staff:,}
+        """
+        st.text(t)
 
 st.markdown(f"{int(round(staff_hours_saved_per_year_per_facility, 0)):,} saved health tech hours per year at ${staff_hourly_value} value per hour = **${expected_savings_staff:,}** saved per year.")
 
@@ -130,14 +131,15 @@ with st.beta_expander("What is the impact of increasing Nurse efficiency?"):
             nurse_hours_saved_per_year_per_facility = nurse_hours_saved_per_year_per_unit * number_of_units
             expected_savings_nurses = round(nurse_hours_saved_per_year_per_facility * nurse_hourly_value)
 
-            st.write(" ")
-            st.markdown("#### Cacluations")
-            st.write(" ")
-            st.text(f"Minutes saved per round: {mins_to_complete_round} * {time_savings_perc / 100} = {round(mins_saved_per_round,1)}")
-            st.text(f"Number of rounds per unit per day: {hours_per_day} / {nurse_q_hours} = {int(number_of_nurse_rounds_per_unit_per_day)}")
-            st.text(f"Hours saved per unit per year: ({round(mins_saved_per_round,1)} / 60) * {int(number_of_nurse_rounds_per_unit_per_day)} * 365  = {round(nurse_hours_saved_per_year_per_unit,1)}")
-            st.text(f"Hours saved per facility per year: {round(nurse_hours_saved_per_year_per_unit,1)} * {number_of_units} = {round(nurse_hours_saved_per_year_per_facility,1)}")
-            st.text(f"Dollars saved per year = {round(nurse_hours_saved_per_year_per_facility, 1):,} * ${nurse_hourly_value} = ${expected_savings_nurses:,}")            
+            t = f"""
+            CALCULATIONS
+            Minutes saved per round: {mins_to_complete_round} * {time_savings_perc / 100} = {round(mins_saved_per_round,1)}
+            Number of rounds per unit per day: {hours_per_day} / {nurse_q_hours} = {int(number_of_nurse_rounds_per_unit_per_day)}
+            Hours saved per unit per year: ({round(mins_saved_per_round,1)} / 60) * {int(number_of_nurse_rounds_per_unit_per_day)} * 365  = {round(nurse_hours_saved_per_year_per_unit,1)}
+            Hours saved per facility per year: {round(nurse_hours_saved_per_year_per_unit,1)} * {number_of_units} = {round(nurse_hours_saved_per_year_per_facility,1)}
+            Dollars saved per year = {round(nurse_hours_saved_per_year_per_facility, 1):,} * ${nurse_hourly_value} = ${expected_savings_nurses:,}
+            """
+            st.text(t)
 
 if nurses_do_rounding:
     st.markdown(f"{int(round(nurse_hours_saved_per_year_per_facility, 0)):,} saved nurse hours per year at ${nurse_hourly_value} value per hour = **${expected_savings_nurses:,}** saved per year.")
@@ -198,9 +200,9 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
             risk_reduction = st.slider("Estimated % risk reduction from 99% safety rounding compliance", 0, 100, 50, 5)
 
         st.write(" ")
-        st.markdown("#### Cacluations")
+        st.markdown("Calcuations")
         st.write(" ")
-        st.text(f"Reduction: {adverse_cost} * {risk_reduction / 100} = {int(adverse_cost * risk_reduction / 100):,}")    
+        st.info(f"Reduction: {adverse_cost} * {risk_reduction / 100} = {int(adverse_cost * risk_reduction / 100):,}")    
 
 expected_cost_reduction_adverse = adverse_cost * risk_reduction / 100
 st.markdown(f"Expected reduction in cost due to adverse events = **${int(expected_cost_reduction_adverse):,}**")
