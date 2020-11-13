@@ -17,14 +17,13 @@ Our digital safety solution consists of a **mobile device and app** for document
 and an optional **verification** component that ensures every patient observation occurs in person.
 Use this calculator to explore the expected impact of our system on your facility.
 """
-st.markdown("### " + d)
-st.sidebar.info("Note: You can expand each section and change inputs by clicking on the rows with a '+'. ")
+st.success(d)
+st.sidebar.info("Expand sections on the right and change inputs and see the impact on ROI here. ")
 
-st.sidebar.markdown("## Product Options")
-
-include_verification = st.sidebar.checkbox("Include Automated Verification ", False)
-
+# st.sidebar.markdown("## Product Options")
 st.write(" ")
+include_verification = st.checkbox("Include Automated Verification in Analyses", False)
+
 st.write(" ")
 st.write(" ")
 
@@ -95,7 +94,7 @@ with st.beta_expander("What is the impact of increasing Health Tech efficiency?"
         """
         st.text(t)
 
-st.markdown(f"{int(round(staff_hours_saved_per_year_per_facility, 0)):,} saved health tech hours per year at ${staff_hourly_value} value per hour = **${expected_savings_staff:,}** saved per year.")
+st.markdown(f"`{int(round(staff_hours_saved_per_year_per_facility, 0)):,}` saved health tech hours per year at ${staff_hourly_value} value per hour = `${expected_savings_staff:,}` saved per year.")
 
 st.write(" ")
 st.write(" ")
@@ -142,7 +141,7 @@ with st.beta_expander("What is the impact of increasing Nurse efficiency?"):
             st.text(t)
 
 if nurses_do_rounding:
-    st.markdown(f"{int(round(nurse_hours_saved_per_year_per_facility, 0)):,} saved nurse hours per year at ${nurse_hourly_value} value per hour = **${expected_savings_nurses:,}** saved per year.")
+    st.markdown(f"`{int(round(nurse_hours_saved_per_year_per_facility, 0)):,}` saved nurse hours per year at ${nurse_hourly_value} value per hour = `${expected_savings_nurses:,}` saved per year.")
 else:
     expected_savings_nurses = 0
     st.markdown("Savings: not applicable")
@@ -168,7 +167,7 @@ with st.beta_expander("Paper Management Reduction"):
         paper_cost = st.slider("Cost per year for paper management.", 0, 30000, 12000, 1000)
 
 expected_savings_paper = paper_cost        
-st.markdown(f"Expected savings = **${expected_savings_paper:,}** per year.")
+st.markdown(f"Expected savings = `${expected_savings_paper:,}` per year.")
 
 st.write(" ")
 st.write(" ")
@@ -205,7 +204,7 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
         st.info(f"Reduction: {adverse_cost} * {risk_reduction / 100} = {int(adverse_cost * risk_reduction / 100):,}")    
 
 expected_cost_reduction_adverse = adverse_cost * risk_reduction / 100
-st.markdown(f"Expected reduction in cost due to adverse events = **${int(expected_cost_reduction_adverse):,}**")
+st.markdown(f"Expected reduction in cost due to adverse events = `${int(expected_cost_reduction_adverse):,}`")
 
 st.write(" ")
 st.write(" ")
@@ -229,9 +228,6 @@ sc2.markdown(f"**${cost:,}**")
 
 sc1.markdown("Annual savings:")
 sc2.markdown(f"**${int(total_savings):,}**")
-
-sc1.markdown(" ")
-sc2.markdown(" ")
 
 sc1.markdown("Annual difference:")
 sc2.markdown(f"**${int(total_savings - cost):,}**")
