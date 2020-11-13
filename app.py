@@ -12,14 +12,23 @@ days_per_year = 365
 
 st.title("VisibleHand: ROI Calculator")
 
-st.header("Please adjust inputs by clicking on rows with a '+'.")
+d = """
+Our digital safety solution consists of a **mobile device and app** for documenting staff safety rounds, 
+and an optional **verification** component that ensures every patient observation occurs in person.
+Use this calculator to explore the expected impact of our system on your facility.
+"""
+st.markdown("### " + d)
+st.sidebar.info("Note: You can expand each section and change inputs by clicking on the rows with a '+'. ")
 
-st.text("(All calculations are for a single facility.)")
+st.sidebar.markdown("## Product Options")
+
+include_verification = st.sidebar.checkbox("Include Automated Verification ", False)
 
 st.write(" ")
 st.write(" ")
+st.write(" ")
 
-with st.beta_expander("Facility Description (expand to modify)", False):
+with st.beta_expander("What is your facility setup and how long do rounds take?", False):
 
     _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
 
@@ -39,31 +48,35 @@ st.markdown(f"**{num_facility_patients}** patients, **{number_of_units}** units,
 
 st.write(" ")
 st.write(" ")
+st.write(" ")
 
 
-with st.beta_expander("Health Tech Efficiency", False):
+with st.beta_expander("What is the impact of increasing Health Tech efficiency?", False):
 
     _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
 
     with slider_col:   
-
-        st.markdown("We find that staff typically complete their rounds 40% faster with our digital app than with paper, providing staff with time to complete other tasks.")
-        st.write(" ")
-        
-        time_savings_perc = st.slider(
-            'Expected % time savings.', 
-            10, 70, 40, 5
-        )      
 
         staff_q_time_str = st.selectbox(
             'How often do staff rounds occur (hosptials usually do Q-15s)?', ('15 minutes', '30 minutes', '60 minutes', '90 minutes', '120 minutes')
         )
         staff_q_time = int(staff_q_time_str.split(" ")[0])
 
+        st.write(" ")
+
         staff_hourly_value = st.slider(
             "Value of 1 extra hour of health tech time. (Note that the average total hourly health tech cost, including overhead, is $18.2 an hour.)", 
-            0, 20, 9
+            0, 20, 10
         ) 
+
+        st.write(" ")
+
+        st.success("We find that staff typically complete their rounds 40% faster with our digital app than with paper, providing staff with time to complete other tasks.")
+        
+        time_savings_perc = st.slider(
+            'Expected % time savings.', 
+            10, 70, 40, 5
+        )     
 
         number_of_staff_rounds_per_unit_per_day = (minutes_per_hour * hours_per_day) / staff_q_time
         mins_saved_per_round = mins_to_complete_round * time_savings_perc / 100
@@ -85,16 +98,17 @@ st.markdown(f"{int(round(staff_hours_saved_per_year_per_facility, 0)):,} saved h
 
 st.write(" ")
 st.write(" ")
+st.write(" ")
 
 
-with st.beta_expander("Nurse Efficiency"):
+with st.beta_expander("What is the impact of increasing Nurse efficiency?"):
     _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
 
     with slider_col:    
         nurses_do_rounding = st.checkbox("Nurses do safety rounds (and review staff rounds)", True)
         if nurses_do_rounding:
 
-            st.markdown("Nurses save at least as much time as staff during their rounds, and usually more because reviewing staff observations is many times faster with our app than with paper.")
+            st.success("Nurses save at least as much time as staff during their rounds, and usually more because reviewing staff observations is many times faster with our app than with paper.")
             st.write(" ")
 
             nurse_q_time_str = st.selectbox(
@@ -133,6 +147,7 @@ else:
 
 st.write(" ")
 st.write(" ")
+st.write(" ")
 
 
 with st.beta_expander("Paper Management Reduction"):
@@ -145,7 +160,7 @@ with st.beta_expander("Paper Management Reduction"):
         * Paper distribution and filing
         * Either scanning and uploading, or searching for records as needed
         """
-        st.markdown(txt)
+        st.warning(txt)
         st.write(" ")
 
         paper_cost = st.slider("Cost per year for paper management.", 0, 30000, 12000, 1000)
@@ -153,6 +168,7 @@ with st.beta_expander("Paper Management Reduction"):
 expected_savings_paper = paper_cost        
 st.markdown(f"Expected savings = **${expected_savings_paper:,}** per year.")
 
+st.write(" ")
 st.write(" ")
 st.write(" ")
 
@@ -169,15 +185,11 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
         * Impacts on survey and the potential for citation
         * Litigation costs, and impacts on liability insurance rates
         * Impact on hospital reputation and ability to recruit patients / fill beds
-
-        When facilities use our software system, compliance rates quickly increase to approximately 99%.
-        The addition of automated verification ensures that all staff, regardless of time of day, are visiting each patient in person.
-        Please estimate the average annual cost of adverse events in your facility, taking into account that low-acuity events happen relatively frequently and that high-acuity events can have economic impacts in millions of dollars.
         """
-        st.markdown(txt)
+        st.warning(txt)
+        st.success("When facilities use our software system, compliance rates quickly increase to approximately 99%. The addition of automated verification ensures that all staff, regardless of time of day, are visiting each patient in person.")
+        st.markdown("Please estimate the average annual cost of adverse events in your facility, taking into account that low-acuity events happen relatively frequently and that high-acuity events can have economic impacts in millions of dollars.")
         st.write(" ")
-        
-        include_verification = st.checkbox("Include Automated Verification in Analysis", False)
 
         adverse_cost = st.slider("Total average annual $ cost of adverse patient events", 0, 1000000, 200000, 10000)
         if include_verification:
@@ -196,7 +208,7 @@ st.markdown(f"Expected reduction in cost due to adverse events = **${int(expecte
 st.write(" ")
 st.write(" ")
 
-st.header("ROI")
+st.sidebar.header("Facility ROI")
 if include_verification:
     cost = 65 * num_facility_patients * 12
 else:
@@ -205,12 +217,23 @@ if include_verification:
     txt = f"Annual recurring cost of VisibleHand digital rounding and verification system = **${cost:,}**"
 else:
     txt = f"Annual recurring cost of VisibleHand digital rounding system = **${cost:,}**"
-st.markdown(txt)
+
+sc1, sc2 = st.sidebar.beta_columns([0.5, 0.5])
 
 total_savings = expected_savings_staff + expected_savings_nurses + expected_savings_paper + expected_cost_reduction_adverse
-st.markdown(f"Annual expected savings = **${int(total_savings):,}**")
 
-st.markdown(f"Annual savings after cost of system = **${int(total_savings - cost):,}**")
+sc1.markdown("Annual cost:")
+sc2.markdown(f"**${cost:,}**")
+
+sc1.markdown("Annual savings:")
+sc2.markdown(f"**${int(total_savings):,}**")
+
+sc1.markdown(" ")
+sc2.markdown(" ")
+
+sc1.markdown("Annual difference:")
+sc2.markdown(f"**${int(total_savings - cost):,}**")
+
 
 
 
