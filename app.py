@@ -194,7 +194,7 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
         st.markdown("Please estimate the average annual cost of adverse events in your facility, taking into account that low-acuity events happen relatively frequently and that high-acuity events can have economic impacts in millions of dollars.")
         st.write(" ")
 
-        adverse_cost = st.slider("Total average annual $ cost of adverse patient events", 0, 1000000, 200000, 10000)
+        adverse_cost = st.slider("Total average annual $ cost of adverse patient events", 0, 1000000, 100000, 10000)
         if include_verification:
             risk_reduction = st.slider("Estimated % risk reduction from 99% compliance and automated proximity verification for all safety checks.", 0, 100, 90, 5)
         else:
