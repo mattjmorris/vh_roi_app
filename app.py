@@ -13,19 +13,16 @@ days_per_year = 365
 st.title("[VisibleHand](https://www.visiblehand.com/) Return On Investment")
 
 d = """
-The [VisibleHand](https://www.visiblehand.com/) digital safety solution consists of a **mobile device and app** for documenting staff safety rounds, 
-and an optional **automated verification component** that ensures every patient observation occurs in person.
+[VisibleHand](https://www.visiblehand.com/) **Digital Rounding** consists of a mobile device and app for documenting staff safety rounds. 
+**Proximity Verification** (optional) ensures every patient observation occurs in person.
 Expand sections on the right (click the '+') to explore the expected impact of our system on your facility.
 """
-# st.sidebar.markdown("--------")
 st.sidebar.info(d)
 
-# st.sidebar.markdown("## Product Options")
 st.write(" ")
 st.write(" ")
-# st.info("Expand sections each section below and change inputs to see the impact on your ROI.")
 st.write(" ")
-st.write("Do you want to include our Automated Verification component in these analyses? Automated Verification adds to the cost of the system but has a greater impact on risk reduction.")
+st.write("Do you want to include our Automated Verification component in these analyses? Automated Verification adds to the cost of the system but has a greater impact on risk reduction and savings.")
 include_verification = st.checkbox("Include automated verification component in analyses", False)
 
 st.write(" ")
