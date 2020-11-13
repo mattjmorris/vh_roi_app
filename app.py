@@ -1,4 +1,5 @@
 import streamlit as st
+import math
 
 st.set_page_config(    
     page_title="VisibleHand Return On Investment Calculator",
@@ -12,32 +13,41 @@ days_per_year = 365
 
 st.title("[VisibleHand](https://www.visiblehand.com/) Return On Investment")
 
+st.write(" ")
+st.write(" ")
+st.write(" ")
+
 d = """
 [VisibleHand](https://www.visiblehand.com/) **Digital Rounding** consists of a mobile device and app for documenting staff safety rounds. 
 **Proximity Verification** (optional) ensures every patient observation occurs in person.
-Expand sections on the right (click the '+') to explore the expected impact of our system on your facility.
+
+Expand sections below (click the '+') to modify assumptions that impact ROI.
 """
-st.sidebar.info(d)
+st.info(d)
 
 st.write(" ")
 st.write(" ")
-st.write(" ")
-st.write("Do you want to include our Patient Proximity component in these analyses? Patient Proximity adds to the cost of the system but has a greater impact on risk reduction and savings.")
-include_verification = st.checkbox("Include automated verification component in analyses", False)
+# st.sidebar.write("Patient Proximity adds to the cost of the system but has a greater impact on risk reduction and savings.")
+s = """
+Enter the number of beds in your facility and include / don't include patient proximity to see your expected ROI.
+"""
+st.sidebar.info(s)
 
-st.write(" ")
-st.write(" ")
+st.sidebar.write(" ")
 
-with st.beta_expander("What is your facility setup and how long do rounds take?", False):
+num_facility_patients = st.sidebar.number_input('Number of patients in your facility', value=100, step=10, format='%d')
+st.write(" ")
+include_verification = st.sidebar.checkbox("Include patient proximity.", False)
+
+
+with st.beta_expander("What is your number of units and how long do rounds take?", False):
 
     _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
 
     with slider_col:
 
-        num_facility_patients = st.number_input('Number of patients in your facility', value=100, step=10, format='%d')
-        st.write(" ")
-
-        number_of_units = st.slider('Number of Units', 1, 20, 5)
+        default_num_units = int(math.ceil(num_facility_patients / 20))
+        number_of_units = st.slider('Number of Units', 1, 20, default_num_units)
         st.write(" ")
 
         mins_to_complete_round = st.slider('Average # of minutes it takes to complete each round with paper (20 patients in a unit typically takes 12 minutes)', 3, 20, 13)
