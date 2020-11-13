@@ -1,7 +1,7 @@
 import streamlit as st
 
 st.set_page_config(    
-    page_title="VisibleHand ROI Calculator",
+    page_title="VisibleHand Return On Investment Calculator",
     page_icon="✋",
     # layout="wide"
 )
@@ -10,22 +10,24 @@ minutes_per_hour = 60
 hours_per_day = 24
 days_per_year = 365
 
-st.title("VisibleHand: ROI Calculator")
+st.title("[VisibleHand](https://www.visiblehand.com/) Return On Investment")
 
 d = """
-The VisibleHand digital safety solution consists of a **mobile device and app** for documenting staff safety rounds, 
-and an optional **verification** component that ensures every patient observation occurs in person.
-Use this calculator to explore the expected impact of our system on your facility.
+The [VisibleHand](https://www.visiblehand.com/) digital safety solution consists of a **mobile device and app** for documenting staff safety rounds, 
+and an optional **automated verification component** that ensures every patient observation occurs in person.
+Expand sections on the right (click the '+') to explore the expected impact of our system on your facility.
 """
-st.markdown("--------")
-st.markdown(d)
-st.sidebar.info("Expand sections on the right and change inputs and see the impact on ROI here. ")
+# st.sidebar.markdown("--------")
+st.sidebar.info(d)
 
 # st.sidebar.markdown("## Product Options")
 st.write(" ")
-include_verification = st.checkbox("Include Automated Verification in Analyses", False)
-
 st.write(" ")
+# st.info("Expand sections each section below and change inputs to see the impact on your ROI.")
+st.write(" ")
+st.write("Do you want to include our Automated Verification component in these analyses? Automated Verification adds to the cost of the system but has a greater impact on risk reduction.")
+include_verification = st.checkbox("Include automated verification component in analyses", False)
+
 st.write(" ")
 st.write(" ")
 
@@ -233,7 +235,7 @@ sc2.markdown(f"`${cost:,}`")
 sc1.markdown("Annual savings:")
 sc2.markdown(f"`${int(total_savings):,}`")
 
-sc1.markdown("Annual difference:")
+sc1.markdown("Difference:")
 sc2.markdown(f"`${int(total_savings - cost):,}`")
 
 
