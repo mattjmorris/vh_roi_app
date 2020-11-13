@@ -13,17 +13,19 @@ days_per_year = 365
 st.title("VisibleHand: ROI Calculator")
 
 d = """
-Our digital safety solution consists of a **mobile device and app** for documenting staff safety rounds, 
+The VisibleHand digital safety solution consists of a **mobile device and app** for documenting staff safety rounds, 
 and an optional **verification** component that ensures every patient observation occurs in person.
 Use this calculator to explore the expected impact of our system on your facility.
 """
-st.success(d)
+st.markdown("--------")
+st.markdown(d)
 st.sidebar.info("Expand sections on the right and change inputs and see the impact on ROI here. ")
 
 # st.sidebar.markdown("## Product Options")
 st.write(" ")
 include_verification = st.checkbox("Include Automated Verification in Analyses", False)
 
+st.write(" ")
 st.write(" ")
 st.write(" ")
 
@@ -199,9 +201,11 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
             risk_reduction = st.slider("Estimated % risk reduction from 99% safety rounding compliance", 0, 100, 50, 5)
 
         st.write(" ")
-        st.markdown("Calcuations")
-        st.write(" ")
-        st.info(f"Reduction: {adverse_cost} * {risk_reduction / 100} = {int(adverse_cost * risk_reduction / 100):,}")    
+        t = f"""
+        CALCULATIONS
+        Reduction: {adverse_cost} * {risk_reduction / 100} = {int(adverse_cost * risk_reduction / 100):,}
+        """
+        st.text(t)        
 
 expected_cost_reduction_adverse = adverse_cost * risk_reduction / 100
 st.markdown(f"Expected reduction in cost due to adverse events = `${int(expected_cost_reduction_adverse):,}`")
@@ -224,13 +228,13 @@ sc1, sc2 = st.sidebar.beta_columns([0.5, 0.5])
 total_savings = expected_savings_staff + expected_savings_nurses + expected_savings_paper + expected_cost_reduction_adverse
 
 sc1.markdown("Annual cost:")
-sc2.markdown(f"**${cost:,}**")
+sc2.markdown(f"`${cost:,}`")
 
 sc1.markdown("Annual savings:")
-sc2.markdown(f"**${int(total_savings):,}**")
+sc2.markdown(f"`${int(total_savings):,}`")
 
 sc1.markdown("Annual difference:")
-sc2.markdown(f"**${int(total_savings - cost):,}**")
+sc2.markdown(f"`${int(total_savings - cost):,}`")
 
 
 
