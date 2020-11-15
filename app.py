@@ -314,13 +314,13 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
             You indicated that your staff currently perform perect rounds "{current_compliance}".
             This likely means that you have a moderate annual risk and potential cost from adverse events.
             """
-            nurse_default_rc = 200000
+            nurse_default_rc = 300000
         else:
             txt2 = f"""
             You indicated that your staff currently perform perect rounds "{current_compliance}".
             This likely means that you have a lower annual risk and potential cost from adverse events.
             """
-            nurse_default_rc = 2000
+            nurse_default_rc = 20000
 
         st.info(txt2)    
 
@@ -328,17 +328,75 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
         st.write(" ")
 
         adverse_cost = st.slider("Total average annual $ cost of adverse patient events", 0, 1000000, nurse_default_rc, 10000)
-
-        t_p = "The addition of automated verification ensures that all staff, regardless of time of day, are visiting each patient in person."
-
-
         
-        st.success("When facilities use our digital rounding system, compliance rates quickly increase to approximately 99%.")
+        tc = "When facilities use our digital rounding system, compliance rates quickly increase to approximately 99+%."
+        tp = "The addition of automated verification ensures that all staff, regardless of time of day, are visiting each patient in person."
+
+        if current_compliance == "Sometimes":
+            if not include_verification:
+                txt3 = f"""
+                When facilities use our digital rounding system, compliance rates quickly increase to approximately 99+%.
+
+                You are not including proximity verification.
+
+                Given that your staff only perform perfect rounds {current_compliance}, we estimate a large improvement in compliance will reduce your risk by 60% compared to current levels.
+                """
+                risk_reduction_default = 60
+            else:
+                txt3 = f"""
+                When facilities use our digital rounding system, compliance rates quickly increase to approximately 99+%.
+
+                You are including proximity verification.
+
+                Given that your staff only perform perfect rounds {current_compliance}, we estimate a large improvement in compliance PLUS quality will reduce your risk by 95% compared to current levels.
+                """
+                risk_reduction_default = 95                
+        elif current_compliance == "Half the Time":
+            if not include_verification:
+                txt3 = f"""
+                When facilities use our digital rounding system, compliance rates quickly increase to approximately 99+%.
+
+                You are not including proximity verification.
+
+                Given that your staff only perform perfect rounds {current_compliance}, we estimate a sizeable improvement in compliance will reduce your risk by 50% compared to current levels.
+                """
+                risk_reduction_default = 50
+            else:
+                txt3 = f"""
+                When facilities use our digital rounding system, compliance rates quickly increase to approximately 99+%.
+
+                You are including proximity verification.
+
+                Given that your staff only perform perfect rounds {current_compliance}, we estimate a sizeable improvement in compliance PLUS quality will reduce your risk by 80% compared to current levels.
+                """
+                risk_reduction_default = 80      
+        else:
+            if not include_verification:
+                txt3 = f"""
+                When facilities use our digital rounding system, compliance rates quickly increase to approximately 99+%.
+                
+                You are not including proximity verification.
+                
+                Given that your staff perform perfect rounds {current_compliance}, we estimate a small but real improvement in compliance will reduce your risk by 15% compared to current levels.
+                """
+                risk_reduction_default = 15
+            else:
+                txt3 = f"""
+                When facilities use our digital rounding system, compliance rates quickly increase to approximately 99+%.
+
+                You are including proximity verification.
+
+                Given that your staff perform perfect rounds {current_compliance}, we estimate a small but real improvement in compliance AND quality will reduce your risk by 25% compared to current levels.
+                """
+                risk_reduction_default = 25  
+    
+
+        st.success(txt3)                   
 
         if include_verification:
-            risk_reduction = st.slider("Estimated % risk reduction from 99% compliance and automated proximity verification for all safety checks.", 0, 100, 90, 5)
+            risk_reduction = st.slider("Estimated % risk reduction from 99+% compliance and automated proximity verification for all safety checks.", 0, 100, risk_reduction_default, 5)
         else:
-            risk_reduction = st.slider("Estimated % risk reduction from 99% safety rounding compliance", 0, 100, 50, 5)
+            risk_reduction = st.slider("Estimated % risk reduction from 99+% safety rounding compliance", 0, 100, risk_reduction_default, 5)
 
         st.write(" ")
         t = f"""
