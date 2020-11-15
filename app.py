@@ -3,8 +3,7 @@ import math
 
 st.set_page_config(    
     page_title="VisibleHand Return On Investment Calculator",
-    page_icon="✋",
-    # layout="wide"
+    page_icon="✋"
 )
 
 minutes_per_hour = 60
@@ -12,79 +11,138 @@ hours_per_day = 24
 days_per_year = 365
 
 st.title("[VisibleHand](https://www.visiblehand.com/) Return On Investment")
-
-st.write(" ")
-st.write(" ")
 st.write(" ")
 
 d = """
-[VisibleHand](https://www.visiblehand.com/) **Digital Rounding** consists of a mobile device and app for documenting staff safety rounds. 
+*[VisibleHand](https://www.visiblehand.com/) **Digital Rounding** consists of a mobile device and app for documenting staff safety rounds. 
 **Proximity Verification** (optional) ensures every patient observation occurs in person.
-
-Expand sections below (click the '+') to modify assumptions that impact ROI.
 """
 st.info(d)
+st.write(" ")
+st.write(" ")
+st.write(" ")
 
-st.write(" ")
-st.write(" ")
-# st.sidebar.write("Patient Proximity adds to the cost of the system but has a greater impact on risk reduction and savings.")
+
+# ================= Sidebar ===================
 s = """
-Enter the number of beds in your facility and include / don't include patient proximity to see your expected ROI.
+## Directions
+
+1. Enter basic info below.
+
+2. Click on "+"s to the right to view and **modify** assumptions.
 """
 st.sidebar.info(s)
 
 st.sidebar.write(" ")
 
-num_facility_patients = st.sidebar.number_input('Number of patients in your facility', value=100, step=10, format='%d')
-st.write(" ")
-include_verification = st.sidebar.checkbox("Include Proximity Verification.", False)
+_, slider_col, _ = st.sidebar.beta_columns([0.04, 0.90, 0.1])
+with slider_col:
+    st.write("Facility Size")
+    num_facility_patients = st.number_input('How many patients are in your facility?', value=100, step=10, format='%d')
+    st.write(" ")
+    st.write("Current Performance")
+    current_compliance = st.select_slider("How often do your staff complete their rounds with perfect compliance and proximity?", ["Sometimes", "Half the Time", "Almost Always"], "Half the Time")
+    
+    st.write(" ")
+    include_verification = st.checkbox("Add Proximity Verification", False)
+
+#==============================================
 
 
-with st.beta_expander("What is your number of units and how long do rounds take?", False):
+with st.beta_expander("Number of units and the time it takes to complete rounds.", False):
 
     _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
 
     with slider_col:
 
         default_num_units = int(math.ceil(num_facility_patients / 20))
-        number_of_units = st.slider('Number of Units', 1, 20, default_num_units)
+        number_of_units = st.slider('Number of Units in your Facility', 1, 20, default_num_units)
+        st.write(" ")
+        patients_per_unit = int(math.ceil(num_facility_patients / number_of_units))
+        if patients_per_unit <= 5:
+            default_time = 3
+            t = f"We find doing PERFECT rounding on paper with approximately {patients_per_unit} patients in a unit takes about {default_time} minutes."
+        elif patients_per_unit <= 10:
+            default_time = 6
+            t = f"We find doing PERFECT rounding on paper with approximately {patients_per_unit} patients in a unit takes about {default_time} minutes."
+        elif patients_per_unit <= 15:
+            default_time = 11
+            t = f"We find doing PERFECT rounding on paper with approximately {patients_per_unit} patients in a unit takes about {default_time} minutes."  
+        elif patients_per_unit <= 20:
+            default_time = 13
+            t = f"We find doing PERFECT rounding on paper with approximately {patients_per_unit} patients in a unit takes about {default_time} minutes."   
+        elif patients_per_unit <= 25:
+            default_time = 15
+            t = f"We find doing PERFECT rounding on paper with approximately {patients_per_unit} patients in a unit takes about {default_time} minutes."  
+        else:
+            default_time = 17
+            t = f"We find doing PERFECT rounding on paper with approximately {patients_per_unit} patients in a unit takes at least {default_time} minutes."                                                 
+        st.info(t)
+        mins_to_complete_round = st.slider('Average # of minutes it takes to complete a PERFECT round with paper.', 3, 20, default_time)
         st.write(" ")
 
-        mins_to_complete_round = st.slider('Average # of minutes it takes to complete each round with paper (20 patients in a unit typically takes 12 minutes)', 3, 20, 13)
-        st.write(" ")
 
-
-st.markdown(f"**{num_facility_patients}** patients, **{number_of_units}** units, **{mins_to_complete_round}** minutes on average to complete rounding.")
+st.markdown(f"**{number_of_units}** units, **{mins_to_complete_round}** minutes on average to complete perfect rounds.")
 
 st.write(" ")
 st.write(" ")
 st.write(" ")
 
 
-with st.beta_expander("What is the impact of increasing Health Tech efficiency?", False):
+with st.beta_expander("Impact on Health Tech efficiency", False):
 
     _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
 
     with slider_col:  
-
-        st.success("We find that staff typically complete their rounds 40% faster with our digital app than with paper, providing staff with time to complete other tasks.")
-        
-        time_savings_perc = st.slider(
-            'Expected % time savings.', 
-            10, 70, 40, 5
-        )     
- 
-
         staff_q_time_str = st.selectbox(
-            'How often do staff rounds occur (hosptials usually do Q-15s)?', ('15 minutes', '30 minutes', '60 minutes', '90 minutes', '120 minutes')
+            'How often staff rounds occur at your facility', ('15 minutes', '30 minutes', '60 minutes', '90 minutes', '120 minutes')
         )
         staff_q_time = int(staff_q_time_str.split(" ")[0])
 
         st.write(" ")
+        if current_compliance == "Sometimes":
+            t = """
+            If your staff are only 'Sometimes' following best practices, our system will help ensure that compliance quickly increases.
+            However, you will not likely see a decrease in the time it takes health techs to do their rounds as they become more diligent about observing each and every patient. 
+            """
+            default = 0
+            st.warning(t)
+        elif current_compliance == "Half the Time":
+            t = """
+            Because your staff are already doing about half of their rounds with full compliance, you can expect about a 10% decrease in the time it takes staff to complete rounds. 
+            Doing rounds well will go faster but some health techs will be learning to be more diligent about observing every patient.
+            """    
+            default = 10   
+            st.success(t)
+        else:
+            t = """
+            If your staff are already following best practices, you can expect to see about a 40% decrease in the time it takes for them
+            to complete rounds, thanks to our digital rounding app which has been optimized for speed and efficiency. 
+            """
+            default = 40
+            st.success(t)
+        
+        time_savings_perc = st.slider(
+            'Expected % time savings from transitioning to digital rounds.', 
+            0, 60, default, 5
+        )     
+ 
+        st.write(" ")
+
+        tt = """
+        The average hourly cost of a health tech worker, including 25% overhead, is about $17.5 an hour.
+        If your state allows adjusting of staff ratios, saving an hour of health tech time is worth close to the full hourly cost.
+        Otherwise, its worth is based on the value of the additional tasks that health tech staff perform.
+        We start off assuming that saving 1 hour of health tech time is worth $14 to you.
+        """
+        if current_compliance == "Sometimes":
+            st.warning(tt)
+        else:
+            st.success(tt)
 
         staff_hourly_value = st.slider(
-            "Value of 1 extra hour of health tech time. (Note that the average total hourly health tech cost, including overhead, is $18.2 an hour.)", 
-            0, 20, 10
+            "Value of 1 extra hour of health tech time at your facility.", 
+            0, 20, 14
         ) 
 
         number_of_staff_rounds_per_unit_per_day = (minutes_per_hour * hours_per_day) / staff_q_time
@@ -112,15 +170,12 @@ st.write(" ")
 st.write(" ")
 
 
-with st.beta_expander("What is the impact of increasing Nurse efficiency?"):
+with st.beta_expander("Impact on Nurse efficiency"):
     _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
 
     with slider_col:    
         nurses_do_rounding = st.checkbox("Nurses do safety rounds (and review staff rounds)", True)
         if nurses_do_rounding:
-
-            st.success("Nurses save at least as much time as staff during their rounds, and usually more because reviewing staff observations is many times faster with our app than with paper.")
-            st.write(" ")
 
             nurse_q_time_str = st.selectbox(
                 'How often do nurse rounds occur (hosptials usually do every 1 or 2 hours)?', ('1 hour', '2 hours', '3 hours', '4 hours', '6 hours'), 
@@ -128,22 +183,66 @@ with st.beta_expander("What is the impact of increasing Nurse efficiency?"):
                 key="nurse_freq"
             )
             nurse_q_hours = int(nurse_q_time_str.split(" ")[0])
+            st.write(" ")
+
+            if current_compliance == "Sometimes":
+                t = """
+                If your staff are only 'Sometimes' following best practices, our system will help ensure that compliance quickly increases.
+                However, you will not likely see a decrease in the time it takes nurses to do their rounds as they become more diligent about observing each and every patient
+                as well as reviewing health tech documentation. 
+                """
+                nurse_default = 0
+                st.warning(t)
+            elif current_compliance == "Half the Time":
+                t = """
+                Nurses save at least as much time as staff during their rounds, and usually more because reviewing staff observations is many times faster with our app than with paper.
+                If your staff are already doing about half of their rounds with full compliance, you can expect at least a 10% decrease in the time it takes nurses to complete rounds. 
+                """    
+                nurse_default = 10   
+                st.success(t)
+            else:
+                t = """
+                Nurses save at least as much time as staff during their rounds, and usually more because reviewing staff observations is many times faster with our app than with paper.
+                If your staff are already following best practices, you can expect to see at least a 40% decrease in the time it takes for nurses
+                to complete rounds. 
+                """
+                nurse_default = 40
+                st.success(t)
+            
+            nurse_time_savings_perc = st.slider(
+                'Expected % time savings from transitioning to digital rounds.', 
+                0, 60, default, 5,
+                key='nurse_time_savings'
+            )     
+    
+            st.write(" ")
+
+            ttt = """
+            The average hourly cost of a nurse, including 25% overhead, is about $45 an hour.
+            The value of a saved hour of nurse time at your facility will vary based on the value of the other tasks that nurses perform.
+            We start off with a conservative assumption of $30 value per saved hour.
+            """
+            if current_compliance == "Sometimes":
+                st.warning(ttt)
+            else:
+                st.success(ttt)
 
             nurse_hourly_value = st.slider(
-                "Value of 1 extra hour of nurse time. (Note that the average total hourly wage, including overhead, is $41).", 
-                0, 45, 16, 
+                "Value of 1 extra hour of nurse time at your facility.", 
+                0, 55, 30, 
                 key='nurse_cost'
             )
 
             number_of_nurse_rounds_per_unit_per_day = hours_per_day / nurse_q_hours
-            nurse_minutes_saved_per_year_per_unit = mins_saved_per_round * number_of_nurse_rounds_per_unit_per_day * days_per_year 
+            nurse_mins_saved_per_round = mins_to_complete_round * nurse_time_savings_perc / 100
+            nurse_minutes_saved_per_year_per_unit = nurse_mins_saved_per_round * number_of_nurse_rounds_per_unit_per_day * days_per_year 
             nurse_hours_saved_per_year_per_unit = nurse_minutes_saved_per_year_per_unit / minutes_per_hour
             nurse_hours_saved_per_year_per_facility = nurse_hours_saved_per_year_per_unit * number_of_units
             expected_savings_nurses = round(nurse_hours_saved_per_year_per_facility * nurse_hourly_value)
 
             t = f"""
             CALCULATIONS
-            Minutes saved per round: {mins_to_complete_round} * {time_savings_perc / 100} = {round(mins_saved_per_round,1)}
+            Minutes saved per round: {mins_to_complete_round} * {nurse_time_savings_perc / 100} = {round(nurse_mins_saved_per_round,1)}
             Number of rounds per unit per day: {hours_per_day} / {nurse_q_hours} = {int(number_of_nurse_rounds_per_unit_per_day)}
             Hours saved per unit per year: ({round(mins_saved_per_round,1)} / 60) * {int(number_of_nurse_rounds_per_unit_per_day)} * 365  = {round(nurse_hours_saved_per_year_per_unit,1)}
             Hours saved per facility per year: {round(nurse_hours_saved_per_year_per_unit,1)} * {number_of_units} = {round(nurse_hours_saved_per_year_per_facility,1)}
@@ -175,7 +274,7 @@ with st.beta_expander("Paper Management Reduction"):
         st.warning(txt)
         st.write(" ")
 
-        paper_cost = st.slider("Cost per year for paper management.", 0, 30000, 12000, 1000)
+        paper_cost = st.slider("Cost per year for paper management at your facility.", 0, 30000, 12000, 1000)
 
 expected_savings_paper = paper_cost        
 st.markdown(f"Expected savings = `${expected_savings_paper:,}` per year.")
@@ -197,13 +296,45 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
         * Impacts on survey and the potential for citation
         * Litigation costs, and impacts on liability insurance rates
         * Impact on hospital reputation and ability to recruit patients / fill beds
+
+        Facilities with low risk tend to experience costs in the thousands of dollars.
+
+        Facilities with high risk have reported costs and losses exceeding one million dollars per year.
         """
         st.warning(txt)
-        st.success("When facilities use our software system, compliance rates quickly increase to approximately 99%. The addition of automated verification ensures that all staff, regardless of time of day, are visiting each patient in person.")
-        st.markdown("Please estimate the average annual cost of adverse events in your facility, taking into account that low-acuity events happen relatively frequently and that high-acuity events can have economic impacts in millions of dollars.")
+
+        if current_compliance == "Sometimes":
+            txt2 = f"""
+            You indicated that your staff currently perform perect rounds only "{current_compliance}".
+            This likely means that you have a higher annual risk and potential cost from adverse events.
+            """
+            nurse_default_rc = 650000
+        elif current_compliance == "Half the Time":
+            txt2 = f"""
+            You indicated that your staff currently perform perect rounds "{current_compliance}".
+            This likely means that you have a moderate annual risk and potential cost from adverse events.
+            """
+            nurse_default_rc = 200000
+        else:
+            txt2 = f"""
+            You indicated that your staff currently perform perect rounds "{current_compliance}".
+            This likely means that you have a lower annual risk and potential cost from adverse events.
+            """
+            nurse_default_rc = 2000
+
+        st.info(txt2)    
+
+        st.markdown("The estimated average annual cost of adverse events in your facility.")
         st.write(" ")
 
-        adverse_cost = st.slider("Total average annual $ cost of adverse patient events", 0, 1000000, 100000, 10000)
+        adverse_cost = st.slider("Total average annual $ cost of adverse patient events", 0, 1000000, nurse_default_rc, 10000)
+
+        t_p = "The addition of automated verification ensures that all staff, regardless of time of day, are visiting each patient in person."
+
+
+        
+        st.success("When facilities use our digital rounding system, compliance rates quickly increase to approximately 99%.")
+
         if include_verification:
             risk_reduction = st.slider("Estimated % risk reduction from 99% compliance and automated proximity verification for all safety checks.", 0, 100, 90, 5)
         else:
@@ -219,10 +350,12 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
 expected_cost_reduction_adverse = adverse_cost * risk_reduction / 100
 st.markdown(f"Expected reduction in cost due to adverse events = `${int(expected_cost_reduction_adverse):,}`")
 
-st.write(" ")
-st.write(" ")
 
-st.sidebar.header("Facility ROI")
+# ================= Sidebar ===================
+# st.sidebar.write("----")
+# st.sidebar.write(" ")
+
+st.sidebar.title("Results")
 if include_verification:
     cost = 65 * num_facility_patients * 12
 else:
@@ -244,7 +377,7 @@ sc2.markdown(f"`${int(total_savings):,}`")
 
 sc1.markdown("Difference:")
 sc2.markdown(f"`${int(total_savings - cost):,}`")
-
+#==============================================
 
 
 
