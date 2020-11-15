@@ -265,16 +265,19 @@ with st.beta_expander("Paper Management Reduction"):
     _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
 
     with slider_col:
-        txt = """
+        txt = f"""
         Part of the reason to move to digital documentation is because of the cost of maintaining a paper system. These costs include: 
         * The paper, printers, and ink
         * Paper distribution and filing
         * Either scanning and uploading, or searching for records as needed
+
+        Based on feedback from customers, we estimate a total cost of $10 per bed per month, which comes to ${120 * num_facility_patients:,} per year for {num_facility_patients} patients
         """
         st.warning(txt)
         st.write(" ")
-
-        paper_cost = st.slider("Cost per year for paper management at your facility.", 0, 30000, 12000, 1000)
+        
+        default = 120 * num_facility_patients
+        paper_cost = st.slider("Cost per year for paper management at your facility.", 0, 35000, default, 1000)
 
 expected_savings_paper = paper_cost        
 st.markdown(f"Expected savings = `${expected_savings_paper:,}` per year.")
@@ -304,30 +307,36 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
         st.warning(txt)
 
         if current_compliance == "Sometimes":
+            amount = 6000
             txt2 = f"""
-            You indicated that your staff currently perform perect rounds only {current_compliance}.
+            You indicated that your staff currently perform perfect rounds only {current_compliance}.
             This likely means that you have a higher annual risk and potential cost from adverse events.
+            We estimate a risk adjusted average cost of ${amount:,} per bed per year, or ${amount * num_facility_patients:,} for your facility.
             """
-            nurse_default_rc = 650000
+            default_rc = amount * num_facility_patients
         elif current_compliance == "Half the Time":
+            amount = 3000
             txt2 = f"""
-            You indicated that your staff currently perform perect rounds {current_compliance}.
+            You indicated that your staff currently perform perfect rounds {current_compliance}.
             This likely means that you have a moderate annual risk and potential cost from adverse events.
+            We estimate a risk adjusted average cost of ${amount:,} per bed per year, or ${amount * num_facility_patients:,} for your facility.
             """
-            nurse_default_rc = 300000
+            default_rc = amount * num_facility_patients
         else:
+            amount = 200
             txt2 = f"""
-            You indicated that your staff currently perform perect rounds {current_compliance}.
+            You indicated that your staff currently perform perfect rounds {current_compliance}.
             This likely means that you have a lower annual risk and potential cost from adverse events.
+            We estimate a risk adjusted average cost of ${amount:,} per bed per year, or ${amount * num_facility_patients:,} for your facility.
             """
-            nurse_default_rc = 20000
+            default_rc = amount * num_facility_patients
 
         st.info(txt2)    
 
         st.markdown("The estimated average annual cost of adverse events in your facility.")
         st.write(" ")
 
-        adverse_cost = st.slider("Total average annual $ cost of adverse patient events", 0, 1000000, nurse_default_rc, 10000)
+        adverse_cost = st.slider("Total average annual $ cost of adverse patient events for your facility", 0, 1500000, default_rc, 10000)
         
         tc = "When facilities use our digital rounding system, compliance rates quickly increase to approximately 99+%."
         tp = "The addition of automated verification ensures that all staff, regardless of time of day, are visiting each patient in person."
@@ -410,9 +419,6 @@ st.markdown(f"Expected reduction in cost due to adverse events = `${int(expected
 
 
 # ================= Sidebar ===================
-# st.sidebar.write("----")
-# st.sidebar.write(" ")
-
 st.sidebar.title("Results")
 if include_verification:
     cost = 65 * num_facility_patients * 12
