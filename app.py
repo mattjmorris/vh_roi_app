@@ -305,19 +305,19 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
 
         if current_compliance == "Sometimes":
             txt2 = f"""
-            You indicated that your staff currently perform perect rounds only "{current_compliance}".
+            You indicated that your staff currently perform perect rounds only {current_compliance}.
             This likely means that you have a higher annual risk and potential cost from adverse events.
             """
             nurse_default_rc = 650000
         elif current_compliance == "Half the Time":
             txt2 = f"""
-            You indicated that your staff currently perform perect rounds "{current_compliance}".
+            You indicated that your staff currently perform perect rounds {current_compliance}.
             This likely means that you have a moderate annual risk and potential cost from adverse events.
             """
             nurse_default_rc = 300000
         else:
             txt2 = f"""
-            You indicated that your staff currently perform perect rounds "{current_compliance}".
+            You indicated that your staff currently perform perect rounds {current_compliance}.
             This likely means that you have a lower annual risk and potential cost from adverse events.
             """
             nurse_default_rc = 20000
