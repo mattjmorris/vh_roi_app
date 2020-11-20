@@ -30,6 +30,8 @@ s = """
 1. Enter basic info below.
 
 2. Click on "+"s to the right to view and **modify** assumptions.
+
+3. See values update in real-time.
 """
 st.sidebar.info(s)
 
@@ -41,7 +43,7 @@ with slider_col:
     num_facility_patients = st.number_input('How many patients are in your facility?', value=100, step=10, format='%d')
     st.write(" ")
     st.write("Current Performance")
-    current_compliance = st.select_slider("How often do your staff complete their rounds with perfect compliance and proximity?", ["Sometimes", "Half the Time", "Almost Always"], "Half the Time")
+    current_compliance = st.select_slider("How often do your staff complete their rounds with PERFECT compliance and proximity? (move slider to change value)", ["Sometimes", "Half of the Time", "Almost Always"], "Half of the Time")
     
     st.write(" ")
     include_verification = st.checkbox("Add Proximity Verification", False)
@@ -107,7 +109,7 @@ with st.beta_expander("Impact on Health Tech efficiency", False):
             """
             default = 0
             st.warning(t)
-        elif current_compliance == "Half the Time":
+        elif current_compliance == "Half of the Time":
             t = """
             Because your staff are already doing about half of their rounds with full compliance, you can expect about a 10% decrease in the time it takes staff to complete rounds. 
             Doing rounds well will go faster but some health techs will be learning to be more diligent about observing every patient.
@@ -193,7 +195,7 @@ with st.beta_expander("Impact on Nurse efficiency"):
                 """
                 nurse_default = 0
                 st.warning(t)
-            elif current_compliance == "Half the Time":
+            elif current_compliance == "Half of the Time":
                 t = """
                 Nurses save at least as much time as staff during their rounds, and usually more because reviewing staff observations is many times faster with our app than with paper.
                 If your staff are already doing about half of their rounds with full compliance, you can expect at least a 10% decrease in the time it takes nurses to complete rounds. 
@@ -314,7 +316,7 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
             We estimate a risk adjusted average cost of ${amount:,} per bed per year, or ${amount * num_facility_patients:,} for your facility.
             """
             default_rc = amount * num_facility_patients
-        elif current_compliance == "Half the Time":
+        elif current_compliance == "Half of the Time":
             amount = 3000
             txt2 = f"""
             You indicated that your staff currently perform perfect rounds {current_compliance}.
@@ -360,7 +362,7 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
                 Given that your staff only perform perfect rounds {current_compliance}, we estimate a large improvement in compliance PLUS quality will reduce your risk by 95% compared to current levels.
                 """
                 risk_reduction_default = 95                
-        elif current_compliance == "Half the Time":
+        elif current_compliance == "Half of the Time":
             if not include_verification:
                 txt3 = f"""
                 When facilities use our digital rounding system, compliance rates quickly increase to approximately 99+%.
@@ -415,8 +417,12 @@ with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
         st.text(t)        
 
 expected_cost_reduction_adverse = adverse_cost * risk_reduction / 100
-st.markdown(f"Expected reduction in cost due to adverse events = `${int(expected_cost_reduction_adverse):,}`")
+st.markdown(f"Expected annual reduction in cost due to adverse events = `${int(expected_cost_reduction_adverse):,}`")
 
+# st.write("------")
+total_savings = expected_savings_staff + expected_savings_nurses + expected_savings_paper + expected_cost_reduction_adverse
+# st.subheader("Total annual expected savings")
+# st.markdown(f"`${int(expected_savings_staff):,}` + `${int(expected_savings_nurses):,}` + `${int(expected_savings_paper):,}` + `${int(expected_cost_reduction_adverse):,}` = `${int(total_savings):,}`")
 
 # ================= Sidebar ===================
 st.sidebar.title("Results")
@@ -430,8 +436,6 @@ else:
     txt = f"Annual recurring cost of VisibleHand digital rounding system = **${cost:,}**"
 
 sc1, sc2 = st.sidebar.beta_columns([0.5, 0.5])
-
-total_savings = expected_savings_staff + expected_savings_nurses + expected_savings_paper + expected_cost_reduction_adverse
 
 sc1.markdown("Annual cost:")
 sc2.markdown(f"`${cost:,}`")
