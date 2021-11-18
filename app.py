@@ -37,28 +37,28 @@ st.sidebar.info(s)
 
 st.sidebar.write(" ")
 
-_, slider_col, _ = st.sidebar.beta_columns([0.04, 0.90, 0.1])
+_, slider_col, _ = st.sidebar.columns([0.04, 0.90, 0.1])
 with slider_col:
-    st.write("Facility Size")
-    num_facility_patients = st.number_input('How many patients are in your facility?', value=100, step=10, format='%d')
+    st.write("Number of Patients")
+    num_facility_patients = st.number_input('How many patients?', value=100, step=10, format='%d')
     st.write(" ")
     st.write("Current Performance")
     current_compliance = st.select_slider("How often do your staff complete their rounds with PERFECT compliance and proximity? (move slider to change value)", ["Sometimes", "Half of the Time", "Almost Always"], "Half of the Time")
     
     st.write(" ")
-    include_verification = st.checkbox("Add Proximity Verification", False)
+    include_verification = True #st.checkbox("Add Proximity Verification", False)
 
 #==============================================
 
 
-with st.beta_expander("Number of units and the time it takes to complete rounds.", False):
+with st.expander("Number of units and the time it takes to complete rounds.", False):
 
-    _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
+    _, slider_col, _ = st.columns([0.02, 0.96, 0.02])
 
     with slider_col:
 
         default_num_units = int(math.ceil(num_facility_patients / 20))
-        number_of_units = st.slider('Number of Units in your Facility', 1, 20, default_num_units)
+        number_of_units = st.slider('Total Number of Units', 1, 50, default_num_units)
         st.write(" ")
         patients_per_unit = int(math.ceil(num_facility_patients / number_of_units))
         if patients_per_unit <= 5:
@@ -91,9 +91,9 @@ st.write(" ")
 st.write(" ")
 
 
-with st.beta_expander("Impact on Health Tech efficiency", False):
+with st.expander("Impact on Health Tech efficiency", False):
 
-    _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
+    _, slider_col, _ = st.columns([0.02, 0.96, 0.02])
 
     with slider_col:  
         staff_q_time_str = st.selectbox(
@@ -172,8 +172,8 @@ st.write(" ")
 st.write(" ")
 
 
-with st.beta_expander("Impact on Nurse efficiency"):
-    _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
+with st.expander("Impact on Nurse efficiency"):
+    _, slider_col, _ = st.columns([0.02, 0.96, 0.02])
 
     with slider_col:    
         nurses_do_rounding = st.checkbox("Nurses do safety rounds (and review staff rounds)", True)
@@ -263,8 +263,8 @@ st.write(" ")
 st.write(" ")
 
 
-with st.beta_expander("Paper Management Reduction"):
-    _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
+with st.expander("Paper Management Reduction"):
+    _, slider_col, _ = st.columns([0.02, 0.96, 0.02])
 
     with slider_col:
         txt = f"""
@@ -279,7 +279,7 @@ with st.beta_expander("Paper Management Reduction"):
         st.write(" ")
         
         default = 120 * num_facility_patients
-        paper_cost = st.slider("Cost per year for paper management at your facility.", 0, 35000, default, 1000)
+        paper_cost = st.slider("Cost per year for paper management at your facility.", 0, 100000, default, 1000)
 
 expected_savings_paper = paper_cost        
 st.markdown(f"Expected savings = `${expected_savings_paper:,}` per year.")
@@ -288,9 +288,9 @@ st.write(" ")
 st.write(" ")
 st.write(" ")
 
-with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
+with st.expander("Reduced Risk and Cost of Adverse Events"):
 
-    _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
+    _, slider_col, _ = st.columns([0.02, 0.96, 0.02])
 
     with slider_col:  
 
@@ -427,7 +427,22 @@ total_savings = expected_savings_staff + expected_savings_nurses + expected_savi
 # ================= Sidebar ===================
 st.sidebar.title("Results")
 if include_verification:
-    cost = 65 * num_facility_patients * 12
+    costVHBed = 0
+    if num_facility_patients < 251:
+        costVHBed = 58.5
+    elif num_facility_patients < 501:
+        costVHBed = 57.5
+    elif num_facility_patients < 1001:
+        costVHBed = 55
+    elif num_facility_patients < 2501:
+        costVHBed = 52.5
+    elif num_facility_patients < 5001:
+        costVHBed = 50.0
+    elif num_facility_patients < 10001:
+        costVHBed = 47.50
+    else:
+        costVHBed = 45.0
+    cost = costVHBed * num_facility_patients * 12
 else:
     cost = 25 * num_facility_patients * 12
 if include_verification:
@@ -435,9 +450,9 @@ if include_verification:
 else:
     txt = f"Annual recurring cost of VisibleHand digital rounding system = **${cost:,}**"
 
-sc1, sc2 = st.sidebar.beta_columns([0.5, 0.5])
+sc1, sc2 = st.sidebar.columns([0.5, 0.5])
 
-sc1.markdown("Annual cost:")
+sc1.markdown("Annual subscription:")
 sc2.markdown(f"`${cost:,}`")
 
 sc1.markdown("Annual savings:")
