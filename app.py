@@ -58,7 +58,8 @@ with st.expander("Number of units and the time it takes to complete rounds.", Fa
     with slider_col:
 
         default_num_units = int(math.ceil(num_facility_patients / 20))
-        number_of_units = st.slider('Total Number of Units', 1, 50, default_num_units)
+        max = max(20, (default_num_units+10))
+        number_of_units = st.slider('Total Number of Units', 1, max, default_num_units)
         st.write(" ")
         patients_per_unit = int(math.ceil(num_facility_patients / number_of_units))
         if patients_per_unit <= 5:
@@ -278,8 +279,9 @@ with st.expander("Paper Management Reduction"):
         st.warning(txt)
         st.write(" ")
         
-        default = 120 * num_facility_patients
-        paper_cost = st.slider("Cost per year for paper management at your facility.", 0, 100000, default, 1000)
+        default = int(120 * num_facility_patients)
+        max = int(default + 10000)
+        paper_cost = st.slider("Cost per year for paper management at your facility.", 0, max, default, 1000)
 
 expected_savings_paper = paper_cost        
 st.markdown(f"Expected savings = `${expected_savings_paper:,}` per year.")
