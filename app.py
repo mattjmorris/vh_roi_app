@@ -333,14 +333,15 @@ with st.expander("Reduced Risk and Cost of Adverse Events"):
             This likely means that you have a lower annual risk and potential cost from adverse events.
             We estimate a risk adjusted average cost of ${amount:,} per bed per year, or ${amount * num_facility_patients:,} for your facility.
             """
-            default_rc = amount * num_facility_patients
+            default_rc = int(amount * num_facility_patients)
 
         st.info(txt2)    
 
         st.markdown("The estimated average annual cost of adverse events in your facility.")
         st.write(" ")
 
-        adverse_cost = st.slider("Total average annual $ cost of adverse patient events for your facility", 0, 1500000, default_rc, 10000)
+        max = int(default_rc + 1000000)
+        adverse_cost = st.slider("Total average annual $ cost of adverse patient events for your facility", 0, max, default_rc, 10000)
         
         tc = "When facilities use our digital rounding system, compliance rates quickly increase to approximately 99+%."
         tp = "The addition of automated verification ensures that all staff, regardless of time of day, are visiting each patient in person."
