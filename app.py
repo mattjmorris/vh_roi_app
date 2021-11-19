@@ -43,7 +43,7 @@ with slider_col:
     num_facility_patients = st.number_input('How many patients?', value=100, step=10, format='%d')
     st.write(" ")
     st.write("Current Performance")
-    current_compliance = st.select_slider("How often do your staff complete their rounds with PERFECT compliance and proximity? (move slider to change value)", ["Sometimes", "Half of the Time", "Almost Always"], "Half of the Time")
+    current_compliance = st.select_slider("How often do your staff complete their rounds with PERFECT compliance and proximity?", ["Sometimes", "Half of the Time", "Almost Always"], "Half of the Time")
     
     st.write(" ")
     include_verification = True #st.checkbox("Add Proximity Verification", False)
