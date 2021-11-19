@@ -13,14 +13,6 @@ days_per_year = 365
 st.title("[VisibleHand](https://www.visiblehand.com/) Return On Investment")
 st.write(" ")
 
-d = """
-*[VisibleHand](https://www.visiblehand.com/) **Digital Rounding** consists of a mobile device and app for documenting staff safety rounds. 
-**Proximity Verification** (optional) ensures every patient observation occurs in person.
-"""
-st.info(d)
-st.write(" ")
-st.write(" ")
-st.write(" ")
 
 
 # ================= Sidebar ===================
@@ -37,7 +29,7 @@ st.sidebar.info(s)
 
 st.sidebar.write(" ")
 
-_, slider_col, _ = st.sidebar.columns([0.04, 0.90, 0.1])
+_, slider_col, _ = st.sidebar.columns([0.1, 0.70, 0.1])
 with slider_col:
     st.write("Number of Patients")
     num_facility_patients = st.number_input('How many patients?', value=100, step=10, format='%d')
@@ -46,7 +38,7 @@ with slider_col:
     current_compliance = st.select_slider("How often do your staff complete their rounds with PERFECT compliance and proximity?", ["Sometimes", "Half of the Time", "Almost Always"], "Half of the Time")
     
     st.write(" ")
-    include_verification = True #st.checkbox("Add Proximity Verification", False)
+    include_verification = True 
 
 #==============================================
 
@@ -340,8 +332,11 @@ with st.expander("Reduced Risk and Cost of Adverse Events"):
         st.markdown("The estimated average annual cost of adverse events in your facility.")
         st.write(" ")
 
+        min = int(0)
         max = int(default_rc + 1000000)
-        adverse_cost = st.slider("Total average annual $ cost of adverse patient events for your facility", 0, max, default_rc, 10000)
+        default_rc = int(default_rc)
+        step = int(10000)
+        adverse_cost = st.slider("Total average annual $ cost of adverse patient events for your facility", min, max, default_rc, step)
         
         tc = "When facilities use our digital rounding system, compliance rates quickly increase to approximately 99+%."
         tp = "The addition of automated verification ensures that all staff, regardless of time of day, are visiting each patient in person."
@@ -428,8 +423,13 @@ total_savings = expected_savings_staff + expected_savings_nurses + expected_savi
 # st.markdown(f"`${int(expected_savings_staff):,}` + `${int(expected_savings_nurses):,}` + `${int(expected_savings_paper):,}` + `${int(expected_cost_reduction_adverse):,}` = `${int(total_savings):,}`")
 
 # ================= Sidebar ===================
+
 st.sidebar.title("Results")
-if include_verification:
+exculsive = st.sidebar.checkbox("Use $45/bed pricing for exclusive + contract")
+
+if exculsive:
+    costVHBed = 45.0
+else:
     costVHBed = 0
     if num_facility_patients < 251:
         costVHBed = 58.5
@@ -445,13 +445,11 @@ if include_verification:
         costVHBed = 47.50
     else:
         costVHBed = 45.0
-    cost = costVHBed * num_facility_patients * 12
-else:
-    cost = 25 * num_facility_patients * 12
-if include_verification:
-    txt = f"Annual recurring cost of VisibleHand digital rounding and verification system = **${cost:,}**"
-else:
-    txt = f"Annual recurring cost of VisibleHand digital rounding system = **${cost:,}**"
+cost = costVHBed * num_facility_patients * 12
+
+
+txt = f"Annual recurring cost of VisibleHand digital rounding and verification system = **${cost:,}**"
+
 
 sc1, sc2 = st.sidebar.columns([0.5, 0.5])
 
