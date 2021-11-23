@@ -35,7 +35,7 @@ with slider_col:
     num_facility_patients = st.number_input('How many patients?', value=100, step=10, format='%d')
     st.write(" ")
     st.write("Current Performance")
-    current_compliance = st.select_slider("Staff complete their rounds with PERFECT compliance and proximity?", ["Sometimes", "Half of the Time", "Almost Always"], "Half of the Time")
+    current_compliance = st.select_slider("Staff complete their rounds with PERFECT compliance and proximity:", ["Sometimes", "Half of the Time", "Almost Always"], "Half of the Time")
     
     st.write(" ")
     include_verification = True 
