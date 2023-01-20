@@ -37,7 +37,7 @@ st.sidebar.info(s)
 
 st.sidebar.write(" ")
 
-_, slider_col, _ = st.sidebar.beta_columns([0.04, 0.90, 0.1])
+_, slider_col, _ = st.sidebar.columns([0.04, 0.90, 0.1])
 with slider_col:
     st.write("Facility Size")
     num_facility_patients = st.number_input('How many patients are in your facility?', value=100, step=10, format='%d')
@@ -51,9 +51,9 @@ with slider_col:
 #==============================================
 
 
-with st.beta_expander("Number of units and the time it takes to complete rounds.", False):
+with st.expander("Number of units and the time it takes to complete rounds.", False):
 
-    _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
+    _, slider_col, _ = st.columns([0.02, 0.96, 0.02])
 
     with slider_col:
 
@@ -91,9 +91,9 @@ st.write(" ")
 st.write(" ")
 
 
-with st.beta_expander("Impact on Health Tech efficiency", False):
+with st.expander("Impact on Health Tech efficiency", False):
 
-    _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
+    _, slider_col, _ = st.columns([0.02, 0.96, 0.02])
 
     with slider_col:  
         staff_q_time_str = st.selectbox(
@@ -172,8 +172,8 @@ st.write(" ")
 st.write(" ")
 
 
-with st.beta_expander("Impact on Nurse efficiency"):
-    _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
+with st.expander("Impact on Nurse efficiency"):
+    _, slider_col, _ = st.columns([0.02, 0.96, 0.02])
 
     with slider_col:    
         nurses_do_rounding = st.checkbox("Nurses do safety rounds (and review staff rounds)", True)
@@ -263,8 +263,8 @@ st.write(" ")
 st.write(" ")
 
 
-with st.beta_expander("Paper Management Reduction"):
-    _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
+with st.expander("Paper Management Reduction"):
+    _, slider_col, _ = st.columns([0.02, 0.96, 0.02])
 
     with slider_col:
         txt = f"""
@@ -288,9 +288,9 @@ st.write(" ")
 st.write(" ")
 st.write(" ")
 
-with st.beta_expander("Reduced Risk and Cost of Adverse Events"):
+with st.expander("Reduced Risk and Cost of Adverse Events"):
 
-    _, slider_col, _ = st.beta_columns([0.02, 0.96, 0.02])
+    _, slider_col, _ = st.columns([0.02, 0.96, 0.02])
 
     with slider_col:  
 
@@ -435,7 +435,7 @@ if include_verification:
 else:
     txt = f"Annual recurring cost of VisibleHand digital rounding system = **${cost:,}**"
 
-sc1, sc2 = st.sidebar.beta_columns([0.5, 0.5])
+sc1, sc2 = st.sidebar.columns([0.5, 0.5])
 
 sc1.markdown("Annual cost:")
 sc2.markdown(f"`${cost:,}`")
